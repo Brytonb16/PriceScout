@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PriceScout</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 2rem; }
+    header { text-align: center; margin-bottom: 2rem; }
+    input, button { padding: 0.5rem; font-size: 1rem; }
+    table { width: 100%; margin-top: 1rem; border-collapse: collapse; }
+    th, td { padding: 0.75rem; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PriceScout</h1>
+    <p>Search for repair part prices</p>
+  </header>
+  <input type="text" id="searchInput" placeholder="Enter part name or model #" />
+  <label><input type="checkbox" id="inStockOnly" /> In Stock Only</label>
+  <button onclick="searchParts()">Search</button>
+  <table id="resultsTable">
+    <thead>
+      <tr><th>Title</th><th>Price</th><th>Source</th><th>In Stock</th><th>Link</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    async function searchParts() {
+      const query = document.getElementById("searchInput").value;
+      const inStockOnly = document.getElementById("inStockOnly").checked;
+      const res = await fetch(`/api/search?q=\${encodeURIComponent(query)}&inStock=\${inStockOnly}`);
+      const data = await res.json();
+      const tbody = document.querySelector("#resultsTable tbody");
+      tbody.innerHTML = "";
+      data.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = \`
+          <td>\${item.title}</td>
+          <td>$\${item.price.toFixed(2)}</td>
+          <td>\${item.source}</td>
+          <td>\${item.in_stock ? "Yes" : "No"}</td>
+          <td><a href="\${item.link}" target="_blank">View</a></td>
+        \`;
+        tbody.appendChild(row);
+      });
+    }
+  </script>
+</body>
+</html>
