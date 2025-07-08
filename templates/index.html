@@ -19,15 +19,21 @@
     document.getElementById("searchButton").addEventListener("click", async () => {
       const query = document.getElementById("searchInput").value;
       const inStock = document.getElementById("inStockOnly").checked;
-      const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&inStock=${inStock}`);
-      const data = await res.json();
-      const table = document.querySelector("#resultsTable tbody");
-      table.innerHTML = "";
-      data.forEach(d => {
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${d.title}</td><td>$${d.price.toFixed(2)}</td><td>${d.source}</td><td>${d.in_stock}</td><td><a href="${d.link}" target="_blank">View</a></td>`;
-        table.appendChild(row);
-      });
+      const tableBody = document.querySelector("#resultsTable tbody");
+      tableBody.innerHTML = "<tr><td colspan='5'>Searching...</td></tr>";
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&inStock=${inStock}`);
+        const data = await response.json();
+        tableBody.innerHTML = ""; // Clear previous results
+        data.forEach(d => {
+          const row = document.createElement("tr");
+          row.innerHTML = `<td>${d.title}</td><td>$${d.price.toFixed(2)}</td><td>${d.source}</td><td>${d.in_stock}</td><td><a href="${d.link}" target="_blank">View</a></td>`;
+          tableBody.appendChild(row);
+        });
+      } catch (err) {
+        console.error(err);
+        tableBody.innerHTML = "<tr><td colspan='5'>Error retrieving results.</td></tr>";
+      }
     });
   </script>
 </body>
