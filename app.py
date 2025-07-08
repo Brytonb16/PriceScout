@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import os
 import logging
 
-load_dotenv()  # Load .env file
+load_dotenv()  # Load .env variables
 
 logging.basicConfig(filename="search.log", level=logging.INFO,
                     format="%(asctime)s %(message)s")
