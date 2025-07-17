@@ -1,0 +1,8 @@
+
+.App { font-family: sans-serif; text-align: center; padding: 20px; }
+.search-bar { margin-bottom: 20px; }
+.search-bar input { padding: 8px; width: 250px; margin-right: 10px; }
+.search-bar button { padding: 8px 12px; }
+table { margin: 0 auto; border-collapse: collapse; width: 90%; }
+table, th, td { border: 1px solid #ccc; }
+th, td { padding: 10px; }
